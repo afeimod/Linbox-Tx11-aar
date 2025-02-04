@@ -270,7 +270,12 @@ public class LoriePreferences extends AppCompatActivity implements PreferenceFra
             }
 
             with("showAdditionalKbd", p -> p.setLayoutResource(R.layout.preference));
-            with("version", p -> p.setSummary(BuildConfig.VERSION_NAME));
+            try {
+                String versionName = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0).versionName;
+                with("version", p -> p.setSummary(versionName));
+            } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+                throw new RuntimeException(e);
+            }
 
             setSummary("displayStretch", R.string.lorie_pref_summary_requiresExactOrCustom);
             setSummary("adjustResolution", R.string.lorie_pref_summary_requiresExactOrCustom);
@@ -438,7 +443,7 @@ public class LoriePreferences extends AppCompatActivity implements PreferenceFra
                             .setTitle("Permission denied")
                             .setMessage("Android requires WRITE_SECURE_SETTINGS permission to start accessibility service automatically.\n" +
                                     "Please, launch this command using ADB:\n" +
-                                    "adb shell pm grant com.termux.x11 android.permission.WRITE_SECURE_SETTINGS")
+                                    "adb shell pm grant com.termux android.permission.WRITE_SECURE_SETTINGS")
                             .setNegativeButton("OK", null)
                             .create()
                             .show();
@@ -449,7 +454,7 @@ public class LoriePreferences extends AppCompatActivity implements PreferenceFra
             requireContext().sendBroadcast(new Intent(ACTION_PREFERENCES_CHANGED) {{
                 putExtra("key", key);
                 putExtra("fromBroadcast", true);
-                setPackage("com.termux.x11");
+                setPackage("com.termux");
             }});
 
             return true;
@@ -559,7 +564,7 @@ public class LoriePreferences extends AppCompatActivity implements PreferenceFra
                                     sendResponse(remote, 1, 1, "Permission denied.\n" +
                                             "Android requires WRITE_SECURE_SETTINGS permission to change `enableAccessibilityServiceAutomatically` setting.\n" +
                                             "Please, launch this command using ADB:\n" +
-                                            "adb shell pm grant com.termux.x11 android.permission.WRITE_SECURE_SETTINGS");
+                                            "adb shell pm grant com.termux android.permission.WRITE_SECURE_SETTINGS");
                                     return;
                                 }
 
@@ -609,7 +614,7 @@ public class LoriePreferences extends AppCompatActivity implements PreferenceFra
                         Intent intent0 = new Intent(ACTION_PREFERENCES_CHANGED);
                         intent0.putExtra("key", key);
                         intent0.putExtra("fromBroadcast", true);
-                        intent0.setPackage("com.termux.x11");
+                        intent0.setPackage("com.termux");
                         context.sendBroadcast(intent0);
                     }
                     edit.commit();
@@ -660,7 +665,7 @@ public class LoriePreferences extends AppCompatActivity implements PreferenceFra
 
             in.detachFd();
             bundle.putBinder(null, iface);
-            i.setPackage("com.termux.x11");
+            i.setPackage("com.termux");
             i.putExtra(null, bundle);
             if (getuid() == 0 || getuid() == 2000)
                 i.setFlags(0x00400000 /* FLAG_RECEIVER_FROM_SHELL */);
