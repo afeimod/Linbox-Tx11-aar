@@ -1,0 +1,112 @@
+name: Build Termux-X11 AAR for Linbox
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'app/**'
+      - 'shell-loader/**'
+      - 'CMakeLists.txt'
+      - 'build.gradle'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'app/**'
+      - 'shell-loader/**'
+      - 'CMakeLists.txt'
+      - 'build.gradle'
+
+permissions:
+  contents: read
+
+jobs:
+  build-aar:
+    name: Build AAR
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        fetch-depth: 1
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        cache: 'gradle'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Setup Android NDK
+      run: |
+        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;25.2.9519653"
+
+    - name: Cache Gradle
+      uses: actions/cache@v4
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: ${{ runner.os }}-gradle-
+
+    - name: Modify to Library Module
+      run: |
+        set -e
+        echo "=== Converting to Library Module ==="
+        sed -i "s/apply plugin: 'com.android.application'/apply plugin: 'com.android.library'/" app/build.gradle
+        sed -i '/applicationId/d' app/build.gradle
+        sed -i 's/minifyEnabled true/\/\/ minifyEnabled true/' app/build.gradle
+        sed -i 's/shrinkResources true/\/\/ shrinkResources true/' app/build.gradle
+        printf '        buildConfigField "String", "VERSION_NAME", "\\"1.03.01\\""\n' > /tmp/version_line.txt
+        sed -i '/buildConfigField "String", "COMMIT"/r /tmp/version_line.txt' app/build.gradle
+        echo "=== Modified build.gradle lines 1-20 ==="
+        sed -n '1,20p' app/build.gradle
+        echo "✓ Converted to library module"
+
+    - name: Build AAR
+      run: |
+        echo "=== Building AAR ==="
+        ./gradlew :app:assembleDebug --no-daemon
+
+    - name: Find AAR
+      id: find-aar
+      run: |
+        echo "=== Finding AAR ==="
+        AAR=$(find app/build/outputs -name "*.aar" | head -1)
+        if [ -z "$AAR" ]; then
+          echo "ERROR: AAR not found!"
+          find app/build/outputs -type f 2>/dev/null | head -20
+          exit 1
+        fi
+        echo "Found: $AAR"
+        echo "AAR_PATH=$AAR" >> $GITHUB_ENV
+        ls -lh "$AAR"
+
+    - name: Extract and Repackage for Linbox
+      run: |
+        echo "=== Preparing AAR for Linbox ==="
+        mkdir -p aar-extract
+        unzip -o "$AAR_PATH" -d aar-extract
+        echo "AAR contents:"
+        ls -la aar-extract/
+        echo ""
+        echo "JNI contents:"
+        find aar-extract -name "*.so" -type f
+        cp "$AAR_PATH" app-debug.aar
+        ls -lh app-debug.aar
+        echo ""
+        echo "=== AAR Contents ==="
+        unzip -l app-debug.aar | head -30
+
+    - name: Upload AAR
+      uses: actions/upload-artifact@v4
+      with:
+        name: termux-x11-aar
+        path: app-debug.aar
+        retention-days: 90
