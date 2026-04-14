@@ -89,15 +89,42 @@ jobs:
           echo ""
           # 更新所有子模块
           git submodule update --init --recursive
+          SUBMODULE_STATUS=$?
+          echo "子模块更新返回码: $SUBMODULE_STATUS"
           echo ""
           echo "=== 验证子模块目录 ==="
           for dir in app/src/main/cpp/*/repo; do
             if [ -d "$dir" ]; then
-              echo "$dir: $(ls -la $dir | head -3)"
+              FILE_COUNT=$(find "$dir" -type f 2>/dev/null | wc -l)
+              echo "$dir: $FILE_COUNT 个文件"
             else
               echo "$dir: 目录不存在或为空"
             fi
           done
+          echo ""
+          echo "=== 检查 fluidsynth 子模块 ==="
+          if [ -d "app/src/main/cpp/fluidsynth/repo" ]; then
+            echo "fluidsynth 目录存在，内容:"
+            ls -la app/src/main/cpp/fluidsynth/repo/ | head -15
+            echo ""
+            echo "检查 make_tables.cmake:"
+            ls -la app/src/main/cpp/fluidsynth/repo/make_tables.cmake 2>/dev/null || echo "文件不存在"
+          else
+            echo "错误: fluidsynth 子模块目录不存在！"
+          fi
+
+      # 修复子模块文件权限
+      - name: 修复子模块文件权限
+        run: |
+          echo "=== 修复子模块文件权限 ==="
+          # 为所有子模块目录设置正确的权限
+          find app/src/main/cpp -type d -name "repo" -exec chmod -R 755 {} \; 2>/dev/null || true
+          # 设置 CMake 相关文件的执行权限
+          find app/src/main/cpp -name "*.cmake" -type f -exec chmod 644 {} \; 2>/dev/null || true
+          find app/src/main/cpp -name "CMakeLists.txt" -type f -exec chmod 644 {} \; 2>/dev/null || true
+          echo "权限修复完成"
+          echo "检查 fluidsynth 目录权限:"
+          ls -la app/src/main/cpp/fluidsynth/ 2>/dev/null | head -10
 
       # 配置 Java JDK 17（AGP 9.1.0 和 Gradle 9.3.1 的要求）
       - name: 配置 JDK 17
