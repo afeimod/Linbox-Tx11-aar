@@ -32,22 +32,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 检出指定分支的源码
+      # 检出指定分支的源码（不包含子模块，让后续步骤处理）
       - name: 检出源码分支
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 1
-          submodules: recursive
           lfs: true
+
+      # 修复 .gitmodules 中 weston 子模块的 URL
+      - name: 修复 weston 子模块配置
+        run: |
+          echo "=== 修复 .gitmodules 配置 ==="
+          # 更新 weston 子模块的 URL 指向正确的仓库
+          git config --file=.gitmodules submodule.app/src/main/cpp/weston/repo.url https://github.com/afeimod/Linbox-Tx11-aar.git
+          # 显示修改后的配置
+          grep -A2 "weston/repo" .gitmodules
+          echo ""
+          echo "=== 配置 git 凭据以访问仓库 ==="
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
 
       # 初始化并更新 Git 子模块
       - name: 初始化 Git 子模块
         run: |
+          echo "=== 同步子模块配置 ==="
+          git submodule sync --recursive
+          echo ""
           echo "=== 初始化 Git 子模块 ==="
           git submodule status
           echo ""
           echo "=== 更新子模块 ==="
+          # 为 weston 子模块切换到 winfusion 分支
+          cd app/src/main/cpp/weston/repo 2>/dev/null && git fetch origin winfusion && git checkout winfusion || true
+          cd ../../..
+          # 更新所有子模块
           git submodule update --init --recursive
           echo ""
           echo "=== 验证子模块目录 ==="
