@@ -56,9 +56,10 @@ jobs:
       - name: 初始化 Git 子模块
         run: |
           echo "=== 初始化 Git 子模块 ==="
-          # 为 weston 子模块切换到 winfusion 分支
+          # 为 weston 子模块切换到 winfusion 分支（强制切换以忽略本地更改）
           if [ -d "app/src/main/cpp/weston/repo" ]; then
             cd app/src/main/cpp/weston/repo
+            git stash --include-untracked || true
             git fetch origin winfusion
             git checkout winfusion
             cd ../../..
