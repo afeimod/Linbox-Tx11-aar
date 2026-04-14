@@ -28,7 +28,7 @@ on:
 
 jobs:
   build:
-    name: 构建APK
+    name: "构建 ${{ inputs.build_type }} APK [分支: ${{ inputs.branch }}]"
     runs-on: ubuntu-latest
     
     steps:
@@ -63,22 +63,9 @@ jobs:
             "ndk;29.0.14206865" \
             "cmake;3.22.1"
       
-      # 配置 Gradle
-      - name: 配置 Gradle
-        uses: gradle/actions/setup-gradle@V4
-        with:
-          gradle-version: 9.3.1
-      
-      # 缓存 Gradle 依赖
-      - name: 缓存 Gradle 依赖
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      # 配置 Gradle Wrapper
+      - name: 配置 Gradle Wrapper
+        run: chmod +x ./gradlew
       
       # 缓存 Android SDK 组件
       - name: 缓存 Android SDK
