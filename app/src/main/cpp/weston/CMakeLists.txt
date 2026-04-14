@@ -487,6 +487,7 @@ add_library(
 target_link_libraries(
         gl-renderer PUBLIC
         weston
+        EGL
         GLESv3
 )
 
