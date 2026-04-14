@@ -253,11 +253,19 @@ public class Launcher {
         if (profile.getBox64BinaryPath() == null || profile.getWineBinaryPath() == null)
             throw new IllegalArgumentException("Binary path is not set.");
 
+        // 获取屏幕分辨率
+        String resolution = profile.getSettingWrapper().getContainerDisplayResolution();
+        
+        // 构造 Wine 虚拟桌面命令
+        // 格式: box64 wine explorer /desktop=wine,<分辨率> <程序>
+        // 默认使用 taskmgr 作为启动程序
+        String desktopArg = "explorer /desktop=wine," + resolution;
+        
         return new String[]{
                 profile.getBox64BinaryPath().toString(),
                 profile.getWineBinaryPath().toString(),
-                // TODO: 添加更多参数
-                "winecfg"
+                desktopArg,
+                "taskmgr"
         };
     }
 
