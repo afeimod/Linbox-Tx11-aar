@@ -126,7 +126,24 @@ jobs:
 
       # 配置 Gradle Wrapper
       - name: 配置 Gradle Wrapper
-        run: chmod +x ./gradlew
+        run: |
+          echo "=== 诊断工作目录 ==="
+          echo "当前目录: $(pwd)"
+          echo "目录内容:"
+          ls -la
+          echo ""
+          # 检查 gradlew 是否存在
+          if [ -f "./gradlew" ]; then
+            echo "gradlew 文件存在，正在设置执行权限..."
+            chmod +x ./gradlew
+            echo "gradlew 权限设置完成"
+            ls -la ./gradlew
+          else
+            echo "错误: gradlew 文件不存在！"
+            echo "检查 app 目录:"
+            ls -la app/ 2>/dev/null || echo "app 目录不存在"
+            exit 1
+          fi
 
       # 缓存 Android SDK NDK 和 CMake
       - name: 缓存 Android SDK 组件
