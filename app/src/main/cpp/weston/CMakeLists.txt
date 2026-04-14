@@ -212,7 +212,9 @@ target_link_libraries(
         wayland-client
         pixman
         xkbcommon
-        egl
+        # egl: Skip on Android - provided by system at runtime
+        $<$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>:>
+        $<$<NOT:$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>>:egl>
         # for memfd_create
         memfd-fallback
 )
@@ -281,7 +283,9 @@ target_link_libraries(
         wayland-server
         pixman
         xkbcommon
-        egl
+        # egl: Skip on Android - provided by system at runtime
+        $<$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>:>
+        $<$<NOT:$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>>:egl>
         weston-shared
         matrix_c
         # libweston
@@ -353,7 +357,9 @@ add_library(
 target_link_libraries(
         gl-borders PUBLIC
         cairo-shared
-        egl
+        # egl: Skip on Android - provided by system at runtime
+        $<$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>:>
+        $<$<NOT:$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>>:egl>
 )
 
 target_include_directories(
@@ -613,8 +619,11 @@ target_link_libraries(
         wayland-protocols-viewporter
         wayland-protocols-xdg-shell
         weston-ivi-application
-        EGL
-        GLESv2
+        # EGL and GLESv2: Skip on Android - provided by system at runtime
+        $<$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>:>
+        $<$<NOT:$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>>:EGL>
+        $<$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>:>
+        $<$<NOT:$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>>:GLESv2>
 )
 
 target_include_directories(
