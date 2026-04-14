@@ -84,7 +84,6 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-          cache: gradle
 
       # 设置 Android SDK 环境变量
       - name: 配置 Android SDK 环境
