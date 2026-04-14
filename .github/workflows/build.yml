@@ -40,6 +40,34 @@ jobs:
           fetch-depth: 0
           lfs: true
 
+      # 验证检出结果
+      - name: 验证源码检出结果
+        run: |
+          echo "=== 验证检出结果 ==="
+          echo "当前目录: $(pwd)"
+          echo "目录内容:"
+          ls -la
+          echo ""
+          echo "检查是否为 Android 项目..."
+          if [ -f "build.gradle" ]; then
+            echo "✓ 找到 build.gradle，这是 Android 项目"
+          fi
+          if [ -f "gradlew" ]; then
+            echo "✓ 找到 gradlew"
+          fi
+          if [ -d "app" ]; then
+            echo "✓ 找到 app 目录"
+          fi
+          if [ -d ".github" ]; then
+            echo "✓ 找到 .github 目录"
+          fi
+          echo ""
+          echo "检查是否存在非预期的文件..."
+          if [ -f "meson.build" ]; then
+            echo "⚠ 警告: 找到 meson.build，这是 weston 项目的文件！"
+            echo "  这说明检出的是错误的仓库或分支"
+          fi
+
       # 修复 .gitmodules 中 weston 子模块的 URL
       - name: 修复 weston 子模块配置
         run: |
@@ -56,16 +84,9 @@ jobs:
       - name: 初始化 Git 子模块
         run: |
           echo "=== 初始化 Git 子模块 ==="
-          # 获取项目根目录
-          PROJECT_ROOT=$(pwd)
-          # 为 weston 子模块切换到 winfusion 分支
-          if [ -d "$PROJECT_ROOT/app/src/main/cpp/weston/repo" ]; then
-            cd "$PROJECT_ROOT/app/src/main/cpp/weston/repo"
-            git stash --include-untracked || true
-            git fetch origin winfusion
-            git checkout winfusion
-            cd "$PROJECT_ROOT"
-          fi
+          echo "修复前检查 app 目录结构:"
+          ls -la app/src/main/cpp/ 2>/dev/null || echo "app/src/main/cpp 目录不存在"
+          echo ""
           # 更新所有子模块
           git submodule update --init --recursive
           echo ""
