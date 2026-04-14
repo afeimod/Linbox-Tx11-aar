@@ -122,6 +122,14 @@ jobs:
           # 设置 CMake 相关文件的执行权限
           find app/src/main/cpp -name "*.cmake" -type f -exec chmod 644 {} \; 2>/dev/null || true
           find app/src/main/cpp -name "CMakeLists.txt" -type f -exec chmod 644 {} \; 2>/dev/null || true
+          # 特别注意：设置 make_tables 可执行文件权限
+          if [ -f "app/src/main/cpp/fluidsynth/bin/make_tables" ]; then
+            chmod 755 app/src/main/cpp/fluidsynth/bin/make_tables
+            echo "已设置 make_tables 为可执行:"
+            ls -la app/src/main/cpp/fluidsynth/bin/make_tables
+          else
+            echo "警告: make_tables 文件不存在"
+          fi
           echo "权限修复完成"
           echo "检查 fluidsynth 目录权限:"
           ls -la app/src/main/cpp/fluidsynth/ 2>/dev/null | head -10
@@ -205,6 +213,49 @@ jobs:
           key: ${{ runner.os }}-android-sdk-${{ hashFiles('.github/workflows/android.yml') }}
           restore-keys: |
             ${{ runner.os }}-android-sdk-
+
+      # 诊断子模块状态（在构建前）
+      - name: 诊断子模块状态
+        run: |
+          echo "=== 诊断子模块状态 ==="
+          echo "检查 app/src/main/cpp/fluidsynth 目录:"
+          ls -la app/src/main/cpp/fluidsynth/ 2>/dev/null | head -20
+          echo ""
+          echo "检查 make_tables.cmake 文件（正确位置）:"
+          if [ -f "app/src/main/cpp/fluidsynth/make_tables.cmake" ]; then
+            echo "文件存在，权限:"
+            ls -la app/src/main/cpp/fluidsynth/make_tables.cmake
+            head -15 app/src/main/cpp/fluidsynth/make_tables.cmake
+          else
+            echo "错误: make_tables.cmake 文件不存在！"
+          fi
+          echo ""
+          echo "检查 bin/make_tables 可执行文件:"
+          if [ -f "app/src/main/cpp/fluidsynth/bin/make_tables" ]; then
+            echo "文件存在，权限:"
+            ls -la app/src/main/cpp/fluidsynth/bin/make_tables
+            file app/src/main/cpp/fluidsynth/bin/make_tables
+          else
+            echo "错误: make_tables 可执行文件不存在！"
+          fi
+          echo ""
+          echo "检查 fluidsynth/repo 子模块:"
+          if [ -d "app/src/main/cpp/fluidsynth/repo" ]; then
+            FILE_COUNT=$(find app/src/main/cpp/fluidsynth/repo -type f 2>/dev/null | wc -l)
+            echo "fluidsynth/repo 目录存在，包含 $FILE_COUNT 个文件"
+          else
+            echo "fluidsynth/repo 目录不存在"
+          fi
+          echo ""
+          echo "检查所有子模块状态:"
+          for dir in app/src/main/cpp/*/repo; do
+            if [ -d "$dir" ]; then
+              FILE_COUNT=$(find "$dir" -type f 2>/dev/null | wc -l)
+              echo "$dir: $FILE_COUNT 个文件"
+            else
+              echo "$dir: 目录不存在"
+            fi
+          done
 
       # 如果请求清理则清理构建产物
       - name: 清理构建产物
