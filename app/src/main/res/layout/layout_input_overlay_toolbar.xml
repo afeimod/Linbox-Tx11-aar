@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_float_popup_body"
+    android:minWidth="200dp"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:id="@+id/layout_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="?attr/textAppearanceTitleMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile"
+            android:textColor="?attr/colorOverlayEditorOnSecondary" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_profile_name"
+            style="?attr/textAppearanceBodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="?attr/colorOverlayEditorOnSecondary"
+            tools:text="profile-test" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_action"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_title">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_add"
+            style="@style/WinfusionTheme.OverlayEditor.Button.IconButton.Outlined"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/add"
+            android:textColor="?attr/colorOverlayEditorOnSecondary"
+            app:cornerRadius="4dp"
+            app:icon="@drawable/ic_add"
+            app:iconTint="?attr/colorOverlayEditorOnSecondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_delete"
+            style="@style/WinfusionTheme.OverlayEditor.Button.IconButton.Outlined"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/delete"
+            android:textColor="?attr/colorOverlayEditorOnSecondary"
+            app:cornerRadius="4dp"
+            app:icon="@drawable/ic_delete"
+            app:iconTint="?attr/colorOverlayEditorOnSecondary" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_toggle_status"
+        style="@style/WinfusionTheme.OverlayEditor.Button.IconButton.Outlined"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/switch_to_preview"
+        android:textColor="?attr/colorOverlayEditorOnSecondary"
+        app:cornerRadius="4dp"
+        app:icon="@drawable/ic_fullscreen"
+        app:iconTint="?attr/colorOverlayEditorOnSecondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_action" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

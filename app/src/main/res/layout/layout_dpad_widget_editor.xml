@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:background="?attr/colorOverlayEditorSecondary">
+
+    <com.google.android.material.textview.MaterialTextView
+        style="?attr/textAppearanceBodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/binding_up"
+        android:textColor="?attr/colorOverlayEditorOnSecondary" />
+
+    <include
+        android:id="@+id/bind_up"
+        layout="@layout/list_item_binding" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="?attr/textAppearanceBodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/binding_down"
+        android:textColor="?attr/colorOverlayEditorOnSecondary" />
+
+    <include
+        android:id="@+id/bind_down"
+        layout="@layout/list_item_binding" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="?attr/textAppearanceBodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/binding_left"
+        android:textColor="?attr/colorOverlayEditorOnSecondary" />
+
+    <include
+        android:id="@+id/bind_left"
+        layout="@layout/list_item_binding" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="?attr/textAppearanceBodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/binding_right"
+        android:textColor="?attr/colorOverlayEditorOnSecondary" />
+
+    <include
+        android:id="@+id/bind_right"
+        layout="@layout/list_item_binding" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="?attr/textAppearanceBodyMedium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dpad_8way_mode"
+            android:textColor="?attr/colorOverlayEditorOnSecondary" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switch_8way"
+            style="?materialSwitchStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

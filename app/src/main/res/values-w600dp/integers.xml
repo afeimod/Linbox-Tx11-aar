@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="setting_list_grid_columns">2</integer>
+    <integer name="container_list_grid_columns">4</integer>
+    <integer name="container_property_list_grid_columns">2</integer>
+    <integer name="shortcut_list_grid_columns">4</integer>
+    <integer name="shortcut_property_list_grid_columns">2</integer>
+    <integer name="content_list_grid_columns">2</integer>
+    <integer name="overlay_profile_list_grid_columns">2</integer>
+</resources>

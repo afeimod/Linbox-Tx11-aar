@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="WinfusionTheme.OverlayEditor">
+
+    </style>
+
+    <style name="WinfusionTheme.OverlayEditor.Slider">
+        <item name="haloColor">@null</item>
+        <item name="labelStyle">@style/Widget.Material3.Slider.Label</item>
+        <item name="thumbColor">?attr/colorOverlayEditorPrimary</item>
+        <item name="tickColorActive">?attr/colorOverlayEditorSecondary</item>
+        <item name="tickColorInactive">?attr/colorOverlayEditorPrimary</item>
+        <item name="tickRadiusActive">@null</item>
+        <item name="tickRadiusInactive">@null</item>
+        <item name="trackColorActive">?attr/colorOverlayEditorPrimary</item>
+        <item name="trackColorInactive">?attr/colorOverlayEditorSecondary</item>
+    </style>
+
+    <style name="WinfusionTheme.OverlayEditor.TextInputLayout.ExposedDropdownMenu" parent="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="endIconMode">dropdown_menu</item>
+        <item name="endIconTint">#FFFFFF</item>
+        <item name="endIconTintMode">src_in</item>
+    </style>
+
+    <style name="WinfusionTheme.OverlayEditor.Button.IconButton" parent="@style/Widget.Material3.Button.IconButton">
+        <item name="iconTint">?attr/colorOverlayEditorPrimary</item>
+    </style>
+
+    <style name="WinfusionTheme.OverlayEditor.Button.IconButton.Outlined">
+        <item name="strokeColor">?attr/colorOverlayEditorOutlined</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+</resources>

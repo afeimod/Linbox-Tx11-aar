@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/nav_containers">
+
+    <fragment
+        android:id="@+id/nav_containers"
+        android:name="com.winfusion.fragment.ContainersFragment"
+        tools:layout="@layout/fragment_containers">
+
+        <action
+            android:id="@+id/action_to_container_properties"
+            app:destination="@id/nav_container_properties"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_shortcuts"
+        android:name="com.winfusion.fragment.ShortcutsFragment"
+        tools:layout="@layout/fragment_shortcuts">
+
+        <action
+            android:id="@+id/action_to_shortcut_properties"
+            app:destination="@id/nav_shortcut_properties"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_home_settings"
+        android:name="com.winfusion.fragment.HomeSettingFragment"
+        tools:layout="@layout/fragment_home_settings">
+
+        <action
+            android:id="@+id/action_to_contents"
+            app:destination="@id/activity_content_manager"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_container_settings"
+        android:name="com.winfusion.fragment.ContainerSettingsFragment"
+        tools:layout="@layout/fragment_settings">
+
+        <action
+            android:id="@+id/action_to_contents"
+            app:destination="@id/activity_content_manager"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+        <argument
+            android:name="mode"
+            app:argType="string" />
+
+        <argument
+            android:name="uuid"
+            app:argType="string" />
+
+        <argument
+            android:name="save_config_on_detach"
+            app:argType="boolean" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_container_info"
+        android:name="com.winfusion.fragment.ContainerInfoFragment"
+        tools:layout="@layout/fragment_settings">
+
+        <argument
+            android:name="uuid"
+            app:argType="string" />
+
+        <argument
+            android:name="save_config_on_detach"
+            app:argType="boolean" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_container_properties"
+        android:name="com.winfusion.fragment.ContainerPropertiesFragment"
+        tools:layout="@layout/fragment_container_properties">
+
+        <argument
+            android:name="container_uuid"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_to_container_info"
+            app:destination="@id/nav_container_info"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+        <action
+            android:id="@+id/action_to_container_settings"
+            app:destination="@id/nav_container_settings"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+        <action
+            android:id="@+id/action_to_registry_editor"
+            app:destination="@id/activity_registry_editor"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+        <action
+            android:id="@+id/action_to_overlay_profiles"
+            app:destination="@id/nav_overlay_profiles"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+        <action
+            android:id="@+id/action_to_wine"
+            app:destination="@id/activity_wine"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_shortcut_info"
+        android:name="com.winfusion.fragment.ShortcutInfoFragment"
+        tools:layout="@layout/fragment_settings">
+
+        <argument
+            android:name="uuid"
+            app:argType="string" />
+
+        <argument
+            android:name="save_config_on_detach"
+            app:argType="boolean" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_shortcut_properties"
+        android:name="com.winfusion.fragment.ShortcutPropertiesFragment"
+        tools:layout="@layout/fragment_shortcut_properties">
+
+        <argument
+            android:name="shortcut_uuid"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_to_shortcut_info"
+            app:destination="@id/nav_shortcut_info"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+        <action
+            android:id="@+id/action_to_shortcut_settings"
+            app:destination="@id/nav_container_settings"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+        <action
+            android:id="@+id/action_to_overlay_profiles"
+            app:destination="@id/nav_overlay_profiles"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_overlay_profiles"
+        android:name="com.winfusion.fragment.OverlayProfilesFragment"
+        tools:layout="@layout/fragment_overlay_profiles">
+
+        <argument
+            android:name="uuid"
+            app:argType="string"
+            app:nullable="true" />
+
+        <argument
+            android:name="mode"
+            app:argType="string"
+            app:nullable="false" />
+
+        <action
+            android:id="@+id/action_to_controls_overlay_editor"
+            app:destination="@id/activity_controls_overlay_editor"
+            app:enterAnim="@anim/anim_slide_in"
+            app:exitAnim="@anim/anim_fade_out"
+            app:popEnterAnim="@anim/anim_fade_in"
+            app:popExitAnim="@anim/anim_slide_out" />
+
+    </fragment>
+
+    <activity
+        android:id="@+id/activity_controls_overlay_editor"
+        android:name="com.winfusion.feature.input.overlay.OverlayEditorActivity"
+        tools:layout="@layout/activity_controls_overlay_editor">
+
+        <argument
+            android:name="file_name"
+            app:argType="string" />
+
+    </activity>
+
+    <activity
+        android:id="@+id/activity_registry_editor"
+        android:name="com.winfusion.activity.RegistryEditorActivity"
+        tools:layout="@layout/activity_registry_editor">
+
+        <argument
+            android:name="container_uuid"
+            app:argType="string" />
+
+    </activity>
+
+    <activity
+        android:id="@+id/activity_content_manager"
+        android:name="com.winfusion.feature.content.ContentManagerActivity"
+        tools:layout="@layout/activity_content_manager">
+
+        <argument
+            android:name="mode"
+            app:argType="string" />
+
+        <argument
+            android:name="uuid"
+            app:argType="string"
+            app:nullable="true"/>
+
+        <argument
+            android:name="filter"
+            app:argType="string"
+            app:nullable="true" />
+
+    </activity>
+
+    <activity
+        android:id="@+id/activity_wine"
+        android:name="com.winfusion.activity.WineActivity"
+        tools:layout="@layout/activity_wine">
+
+        <argument
+            android:name="mode"
+            app:argType="string" />
+
+        <argument
+            android:name="uuid"
+            app:argType="string" />
+
+    </activity>
+
+</navigation>

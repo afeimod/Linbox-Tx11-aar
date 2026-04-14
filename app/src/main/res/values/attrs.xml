@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WinfusionTheme">
+        <attr name="colorOverlayEditorPrimary" format="color" />
+        <attr name="colorOverlayEditorOnPrimary" format="color" />
+        <attr name="colorOverlayEditorSecondary" format="color" />
+        <attr name="colorOverlayEditorOnSecondary" format="color" />
+        <attr name="colorOverlayEditorOutlined" format="color" />
+    </declare-styleable>
+</resources>

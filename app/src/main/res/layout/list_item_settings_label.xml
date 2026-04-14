@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/text_label"
+    style="@style/TextAppearance.Material3.LabelLarge"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="start|center_vertical"
+    android:ellipsize="marquee"
+    android:focusable="false"
+    android:marqueeRepeatLimit="marquee_forever"
+    android:maxLines="1"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="8dp"
+    android:singleLine="true"
+    android:textColor="?attr/colorPrimary"
+    tools:text="Label" />

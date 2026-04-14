@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- This navigation graph is only used to enable the Safe Args feature for DialogFragment. -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialog_nav_graph"
+    tools:ignore="InvalidNavigation">
+
+    <fragment
+        android:id="@+id/nav_edit_text_dialog"
+        android:name="com.winfusion.dialog.EditTextDialogFragment"
+        tools:layout="@layout/dialog_edit_text">
+
+        <argument
+            android:name="title_id"
+            app:argType="integer" />
+
+        <argument
+            android:name="default_text"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_confirm_by_input_dialog"
+        android:name="com.winfusion.dialog.ConfirmByInputDialogFragment"
+        tools:layout="@layout/dialog_confirm_by_input">
+
+        <argument
+            android:name="title_id"
+            app:argType="integer" />
+
+        <argument
+            android:name="msg_id"
+            app:argType="integer" />
+
+        <argument
+            android:name="key"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_edit_registry_value_dialog"
+        android:name="com.winfusion.dialog.EditRegistryValueDialogFragment"
+        tools:layout="@layout/dialog_edit_registry_value" />
+
+    <fragment
+        android:id="@+id/nav_menu_dialog"
+        android:name="com.winfusion.dialog.MenuDialogFragment"
+        tools:layout="@layout/dialog_menu">
+
+        <argument
+            android:name="title_id"
+            app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_processing_dialog"
+        android:name="com.winfusion.dialog.InfiniteProgressDialogFragment"
+        tools:layout="@layout/dialog_processing">
+
+        <argument
+            android:name="msg_id"
+            app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_content_details_dialog"
+        android:name="com.winfusion.dialog.ContentDetailsDialogFragment"
+        tools:layout="@layout/dialog_content_details">
+
+        <argument
+            android:name="positive_btn"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+        <argument
+            android:name="negative_btn"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+    </fragment>
+
+</navigation>

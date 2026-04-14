@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:background="?attr/colorOverlayEditorSecondary">
+
+    <com.google.android.material.textview.MaterialTextView
+        style="?attr/textAppearanceBodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/shape"
+        android:textColor="?attr/colorOverlayEditorOnSecondary" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/WinfusionTheme.OverlayEditor.TextInputLayout.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/auto_text_shape"
+            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:textColor="?attr/colorOverlayEditorOnSecondary"
+            tools:text="Rect" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        style="?attr/textAppearanceBodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/binding"
+        android:textColor="?attr/colorOverlayEditorOnSecondary" />
+
+    <include
+        android:id="@+id/bind_1"
+        layout="@layout/list_item_binding" />
+
+    <include
+        android:id="@+id/bind_2"
+        layout="@layout/list_item_binding" />
+
+    <include
+        android:id="@+id/bind_3"
+        layout="@layout/list_item_binding" />
+
+    <include
+        android:id="@+id/bind_4"
+        layout="@layout/list_item_binding" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="?attr/textAppearanceBodyMedium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/toggle_switch"
+            android:textColor="?attr/colorOverlayEditorOnSecondary" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switch_toggle"
+            style="?attr/materialSwitchStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        style="?attr/textAppearanceBodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/text"
+        android:textColor="?attr/colorOverlayEditorOnSecondary" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text"
+            style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="?attr/colorOverlayEditorOnSecondary"
+            tools:text="A" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

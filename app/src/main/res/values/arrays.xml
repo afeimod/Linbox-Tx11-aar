@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Registry value type -->
+
+    <string-array name="registry_value_type_entries">
+        <item>@string/registry_type_sz</item>
+        <item>@string/registry_type_binary</item>
+        <item>@string/registry_type_dword</item>
+        <item>@string/registry_type_qword</item>
+        <item>@string/registry_type_multi_sz</item>
+        <item>@string/registry_type_expand_sz</item>
+    </string-array>
+
+    <string-array name="registry_value_type_values">
+        <item>REG_SZ</item>
+        <item>REG_BINARY</item>
+        <item>REG_DWORD</item>
+        <item>REG_QWORD</item>
+        <item>REG_MULTI_SZ</item>
+        <item>REG_EXPAND_SZ</item>
+    </string-array>
+
+    <!-- Overlay widget type -->
+
+    <string-array name="overlay_widget_type_entries">
+        <item>@string/button</item>
+        <item>@string/dpad</item>
+        <item>@string/thumb_stick</item>
+    </string-array>
+
+    <string-array name="overlay_widget_type_values">
+        <item>Button</item>
+        <item>DPad</item>
+        <item>ThumbStick</item>
+    </string-array>
+
+    <!-- Button widget shape -->
+
+    <string-array name="button_widget_shape_entries">
+        <item>@string/circle</item>
+        <item>@string/square</item>
+        <item>@string/rect</item>
+        <item>@string/round_rect</item>
+    </string-array>
+
+    <string-array name="button_widget_shape_values">
+        <item>Circle</item>
+        <item>Square</item>
+        <item>Rect</item>
+        <item>RoundRect</item>
+    </string-array>
+
+    <!-- Binding type -->
+
+    <string-array name="binding_type_entries">
+        <item>@string/keyboard</item>
+        <item>@string/mouse_button</item>
+        <item>@string/mouse_action</item>
+        <item>@string/gamepad_button</item>
+        <item>@string/gamepad_action</item>
+        <item>@string/none</item>
+    </string-array>
+
+    <string-array name="binding_type_values">
+        <item>Keyboard</item>
+        <item>MouseButton</item>
+        <item>MouseAction</item>
+        <item>ControllerButton</item>
+        <item>ControllerAction</item>
+        <item>None</item>
+    </string-array>
+
+    <!-- ThumbStickWidget binding mode -->
+
+    <string-array name="thumb_stick_widget_binding_mode_entries">
+        <item>@string/left_thumb_stick</item>
+        <item>@string/right_thumb_stick</item>
+        <item>@string/mouse</item>
+        <item>@string/mapping</item>
+    </string-array>
+
+    <string-array name="thumb_stick_widget_binding_mode_values">
+        <item>LeftThumbStick</item>
+        <item>RightThumbStick</item>
+        <item>Mouse</item>
+        <item>Mapping</item>
+    </string-array>
+
+</resources>

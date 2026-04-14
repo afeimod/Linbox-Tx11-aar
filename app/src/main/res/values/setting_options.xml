@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Region -->
+
+    <string-array name="infoRegionNamesAndValues">
+        <item>ar_SA</item>
+        <item>cs_CZ</item>
+        <item>da_DK</item>
+        <item>de_DE</item>
+        <item>el_GR</item>
+        <item>en_US</item>
+        <item>es_ES</item>
+        <item>fi_FI</item>
+        <item>fr_FR</item>
+        <item>hu_HU</item>
+        <item>it_IT</item>
+        <item>ja_JP</item>
+        <item>ko_KR</item>
+        <item>ml_ML</item>
+        <item>nl_NL</item>
+        <item>no_NO</item>
+        <item>pl_PL</item>
+        <item>pt_PT</item>
+        <item>ru_RU</item>
+        <item>sv_SE</item>
+        <item>tr_TR</item>
+        <item>zh_CN</item>
+        <item>zh_TW</item>
+    </string-array>
+
+    <!-- Resolution -->
+
+    <string-array name="displayResolutionNames">
+        <item>640x360 (16:9)</item>
+        <item>640x480 (4:3)</item>
+        <item>800x600 (4:3)</item>
+        <item>960x544 (16:9)</item>
+        <item>1024x768 (4:3)</item>
+        <item>1280x720 (16:9)</item>
+        <item>1280x800 (16:10)</item>
+        <item>1600x900 (16:9)</item>
+        <item>1600x1200 (4:3)</item>
+        <item>1920x1080 (16:9)</item>
+    </string-array>
+
+    <string-array name="displayResolutionValues">
+        <item>640x360</item>
+        <item>640x480</item>
+        <item>800x600</item>
+        <item>960x544</item>
+        <item>1024x768</item>
+        <item>1280x720</item>
+        <item>1280x800</item>
+        <item>1600x900</item>
+        <item>1600x1200</item>
+        <item>1920x1080</item>
+    </string-array>
+
+    <!-- Refresh Rate -->
+
+    <string-array name="displayRefreshRateNames">
+        <item>30Hz</item>
+        <item>60Hz</item>
+        <item>90Hz</item>
+        <item>120Hz</item>
+        <item>144Hz</item>
+        <item>@string/unlimited</item>
+    </string-array>
+
+    <string-array name="displayRefreshRateValues">
+        <item>30</item>
+        <item>60</item>
+        <item>90</item>
+        <item>120</item>
+        <item>144</item>
+        <item>1000</item>
+    </string-array>
+
+    <!-- Scaling Mode -->
+
+    <string-array name="displayScalingModeNames">
+        <item>@string/fit</item>
+        <item>@string/original</item>
+        <item>@string/stretch</item>
+    </string-array>
+
+    <string-array name="displayScalingModeValues">
+        <item>fit</item>
+        <item>original</item>
+        <item>stretch</item>
+    </string-array>
+
+    <!-- Screen Orientation -->
+
+    <string-array name="displayOrientationNames">
+        <item>@string/landscape</item>
+        <item>@string/portrait</item>
+    </string-array>
+
+    <string-array name="displayOrientationValues">
+        <item>landscape</item>
+        <item>portrait</item>
+    </string-array>
+
+    <!-- RendererBackend -->
+
+    <string-array name="displayRendererBackendNames">
+        <item>@string/pixman_renderer</item>
+        <item>@string/opengles_renderer</item>
+    </string-array>
+
+    <string-array name="displayRendererBackendValues">
+        <item>pixman</item>
+        <item>gles</item>
+    </string-array>
+
+    <!-- Audio Driver -->
+
+    <string-array name="audioDriverNames">
+        <item>@string/alsa</item>
+        <item>@string/pulse_audio</item>
+    </string-array>
+
+    <string-array name="audioDriverValues">
+        <item>alsa</item>
+        <item>pulse</item>
+    </string-array>
+
+    <!-- Audio Backend -->
+
+    <string-array name="audioBackendNames">
+        <item>@string/opensl</item>
+        <item>@string/aaudio</item>
+    </string-array>
+
+    <string-array name="audioBackendValues">
+        <item>opensl</item>
+        <item>aaudio</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,89 @@
+plugins {
+    alias(libs.plugins.android.application)
+    id 'androidx.navigation.safeargs'
+}
+
+android {
+    namespace = "com.winfusion"
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId = "com.winfusion"
+        minSdk = 28
+        //noinspection ExpiredTargetSdkVersion
+        targetSdk = 28
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags = [""]
+            }
+        }
+
+        ndk {
+            //noinspection ChromeOsAbiSupport
+            abiFilters = ["arm64-v8a"]
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles = [getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"]
+        }
+
+        debug {
+            minifyEnabled = false
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    externalNativeBuild {
+        cmake {
+            path = file('src/main/cpp/CMakeLists.txt')
+            version = '3.22.1'
+        }
+    }
+    buildToolsVersion = '36.0.0'
+    ndkVersion = '29.0.14206865'
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+}
+
+dependencies {
+
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.constraintlayout
+    implementation libs.lifecycle.livedata.ktx
+    implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
+    implementation libs.commons.compress
+    implementation libs.xz
+    implementation(libs.zstd.jni) { artifact { type = "aar" } }
+    implementation libs.gson
+    implementation libs.swiperefreshlayout
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+    implementation fileTree(dir: "libs", include: ["**/*.jar"])
+    debugImplementation libs.leakcanary.android.process
+    debugImplementation libs.leakcanary.android
+}
