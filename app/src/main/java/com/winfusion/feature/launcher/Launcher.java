@@ -212,9 +212,24 @@ public class Launcher {
         westonConfig.setXdgRuntimePath(rootfs.getTmpDir().toString());
         westonConfig.setRenderRefreshRate(wrapper.getContainerDisplayRefreshRate());
         westonConfig.setRendererType(WESTON_RENDERER_PIXMAN);
-        String[] resolution = wrapper.getContainerDisplayResolution().toLowerCase().split("x");
-        westonConfig.setScreenWidth(Integer.parseInt(resolution[0]));
-        westonConfig.setScreenHeight(Integer.parseInt(resolution[1]));
+        
+        // 安全解析分辨率，添加格式验证
+        String resolutionStr = wrapper.getContainerDisplayResolution();
+        if (resolutionStr == null || resolutionStr.isEmpty() || !resolutionStr.contains("x")) {
+            // 默认分辨率
+            westonConfig.setScreenWidth(1024);
+            westonConfig.setScreenHeight(768);
+        } else {
+            try {
+                String[] resolution = resolutionStr.toLowerCase().split("x");
+                westonConfig.setScreenWidth(Integer.parseInt(resolution[0]));
+                westonConfig.setScreenHeight(Integer.parseInt(resolution[1]));
+            } catch (NumberFormatException e) {
+                // 解析失败，使用默认分辨率
+                westonConfig.setScreenWidth(1024);
+                westonConfig.setScreenHeight(768);
+            }
+        }
 
         weston.start(executor);
         weston.setWestonGLSurfaceView(westonSurfaceView);
@@ -238,8 +253,26 @@ public class Launcher {
 
     private void startShell() throws IOException {
         profile.getEnv().put("WINFUSION_HOME", profile.getFilesDir().toString());
+        
+        // 构建并验证命令
+        String[] command;
+        try {
+            command = buildCommand();
+        } catch (IllegalArgumentException e) {
+            callback.onLaunchFailed("Failed to build command: " + e.getMessage());
+            return;
+        }
+        
+        // 记录命令用于调试
+        StringBuilder cmdStr = new StringBuilder();
+        for (int i = 0; i < command.length; i++) {
+            if (i > 0) cmdStr.append(" ");
+            cmdStr.append(command[i]);
+        }
+        callback.onShellOutput("Executing command: " + cmdStr.toString());
+        
         shellExecutor = new ShellExecutor()
-                .setCommand(buildCommand())
+                .setCommand(command)
                 .putEnv(profile.getEnv())
                 .setWorkingDir(profile.getContainer().getUserHomeDir())
                 .onStdOut(s -> callback.onShellOutput(s))
@@ -251,20 +284,29 @@ public class Launcher {
     @NonNull
     private String[] buildCommand() {
         if (profile.getBox64BinaryPath() == null || profile.getWineBinaryPath() == null)
-            throw new IllegalArgumentException("Binary path is not set.");
+            throw new IllegalArgumentException("Binary path is not set. Box64: " + 
+                profile.getBox64BinaryPath() + ", Wine: " + profile.getWineBinaryPath());
 
         // 获取屏幕分辨率
-        String resolution = profile.getSettingWrapper().getContainerDisplayResolution();
+        SettingWrapper wrapper = profile.getSettingWrapper();
+        String resolution = wrapper.getContainerDisplayResolution();
+        
+        // 处理分辨率格式，确保是 WIDTHxHEIGHT 格式
+        if (resolution == null || resolution.isEmpty()) {
+            resolution = "1024x768"; // 默认分辨率
+        } else if (!resolution.contains("x")) {
+            // 如果格式不正确，尝试修复
+            resolution = resolution + "x768";
+        }
         
         // 构造 Wine 虚拟桌面命令
-        // 格式: box64 wine explorer /desktop=wine,<分辨率> <程序>
-        // 默认使用 taskmgr 作为启动程序
-        String desktopArg = "explorer /desktop=wine," + resolution;
-        
+        // 格式: box64 wine explorer desktop=shell,<分辨率> taskmgr
+        // 注意: explorer 和 desktop= 参数必须分开传递，因为 ProcessBuilder 会将数组每个元素作为单独参数
         return new String[]{
                 profile.getBox64BinaryPath().toString(),
                 profile.getWineBinaryPath().toString(),
-                desktopArg,
+                "explorer",
+                "desktop=shell," + resolution,
                 "taskmgr"
         };
     }
