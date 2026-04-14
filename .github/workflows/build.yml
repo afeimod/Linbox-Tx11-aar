@@ -32,14 +32,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 检出指定分支的源码（完整克隆以正确处理子模块）
+      # 检出指定分支的源码（不包含子模块，让后续步骤处理）
       - name: 检出源码分支
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 0
           lfs: true
-          submodules: recursive
 
       # 修复 .gitmodules 中 weston 子模块的 URL
       - name: 修复 weston 子模块配置
@@ -47,6 +46,9 @@ jobs:
           echo "=== 修复 .gitmodules 配置 ==="
           # 更新 weston 子模块的 URL 指向正确的仓库
           git config --file=.gitmodules submodule.app/src/main/cpp/weston/repo.url https://github.com/afeimod/Linbox-Tx11-aar.git
+          # 显示修改后的配置
+          grep -A2 "weston/repo" .gitmodules
+          echo ""
           # 同步子模块配置
           git submodule sync --recursive
 
