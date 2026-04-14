@@ -38,7 +38,26 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 1
+          submodules: recursive
           lfs: true
+
+      # 初始化并更新 Git 子模块
+      - name: 初始化 Git 子模块
+        run: |
+          echo "=== 初始化 Git 子模块 ==="
+          git submodule status
+          echo ""
+          echo "=== 更新子模块 ==="
+          git submodule update --init --recursive
+          echo ""
+          echo "=== 验证子模块目录 ==="
+          for dir in app/src/main/cpp/*/repo; do
+            if [ -d "$dir" ]; then
+              echo "$dir: $(ls -la $dir | head -3)"
+            else
+              echo "$dir: 目录不存在或为空"
+            fi
+          done
 
       # 配置 Java JDK 17（AGP 9.1.0 和 Gradle 9.3.1 的要求）
       - name: 配置 JDK 17
