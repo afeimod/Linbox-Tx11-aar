@@ -81,24 +81,36 @@ public class WineConfigure extends Configure {
 
     private void setupWinePrefixIfNeeded(@NonNull Profile profile) throws LauncherException {
         Path prefixPath = profile.getContainer().getWinePrefixDir();
-        if (Files.exists(prefixPath) && !FileUtils.isDirectoryEmpty(prefixPath))
-            return;
+        
+        // 检查 WINEPREFIX 是否已经初始化
+        if (Files.exists(prefixPath)) {
+            try {
+                if (!FileUtils.isDirectoryEmpty(prefixPath)) {
+                    // WINEPREFIX 已存在且不为空，跳过初始化
+                    return;
+                }
+            } catch (IllegalStateException e) {
+                // 目录可能不存在或无法访问，继续初始化
+            }
+        }
 
         if (profile.getBox64BinaryPath() == null)
             throw new LauncherException("Box64 must be configured before wine.");
 
+        // 初始化 WINEPREFIX
         try {
             new ShellExecutor()
                     .putEnv(profile.getEnv())
                     .setCommand(
                             profile.getBox64BinaryPath().toString(),
                             Objects.requireNonNull(profile.getWineBinaryPath()).toString(),
-                            "wineboot"
+                            "wineboot",
+                            "--init"  // 添加 --init 参数，确保完全初始化
                     )
                     .exec()
                     .waitFor();
         } catch (IOException | InterruptedException e) {
-            throw new LauncherException(e);
+            throw new LauncherException("Failed to initialize WINEPREFIX: " + e.getMessage(), e);
         }
 
         SettingWrapper wrapper = profile.getSettingWrapper();
