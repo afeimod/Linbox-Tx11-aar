@@ -7,40 +7,49 @@ set(SCRIPTS_BIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/scripts/bin)
 include(scripts/utils.cmake)
 include(scripts/wayland-scanner.cmake)
 
-# 查找 EGL 库 (在 Android NDK 中包含在 OpenGL 包中)
-find_package(OpenGL REQUIRED)
-if(OpenGL_EGL_FOUND)
-    # 创建 EGL 导入目标以便与 weston 的 CMakeLists.txt 兼容
+# 对于 Android NDK 交叉编译，EGL 和 OpenGL ES 是由 NDK 提供的系统库
+# CMake 的 FindOpenGL 模块不适用于 Android，需要使用 NDK 的库路径
+if(CMAKE_SYSTEM_NAME STREQUAL "Android" AND ANDROID_NDK)
+    # Android NDK 环境
+    # 获取 NDK 的 sysroot 和 triple 信息
+    execute_process(
+        COMMAND ${CMAKE_CXX_COMPILER} -print-sysroot
+        OUTPUT_VARIABLE ANDROID_NDK_SYSROOT
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    
+    # 确定 NDK triple
+    if(NOT ANDROID_LLVM_TRIPLE)
+        if(ANDROID_ABI STREQUAL "arm64-v8a")
+            set(ANDROID_LLVM_TRIPLE "aarch64-linux-android")
+        elseif(ANDROID_ABI STREQUAL "armeabi-v7a")
+            set(ANDROID_LLVM_TRIPLE "arm-linux-androideabi")
+        elseif(ANDROID_ABI STREQUAL "x86_64")
+            set(ANDROID_LLVM_TRIPLE "x86_64-linux-android")
+        elseif(ANDROID_ABI STREQUAL "x86")
+            set(ANDROID_LLVM_TRIPLE "i686-linux-android")
+        endif()
+    endif()
+    
+    set(EGL_NDK_PATH "${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${ANDROID_LLVM_TRIPLE}")
+    set(EGL_INCLUDE_PATH "${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include")
+    
+    message(STATUS "Android NDK EGL: Using ${EGL_NDK_PATH}/libEGL.so")
+    
+    # 创建 EGL::EGL 导入目标
     if(NOT TARGET EGL::EGL)
         add_library(EGL::EGL SHARED IMPORTED)
         set_target_properties(EGL::EGL PROPERTIES
-            IMPORTED_LOCATION ${OpenGL_EGL_LIBRARY}
-            INTERFACE_INCLUDE_DIRECTORIES ${OpenGL_INCLUDE_DIR}
+            IMPORTED_LOCATION "${EGL_NDK_PATH}/libEGL.so"
+            INTERFACE_INCLUDE_DIRECTORIES "${EGL_INCLUDE_PATH}"
         )
-        message(STATUS "Found EGL library: ${OpenGL_EGL_LIBRARY}")
+        message(STATUS "Created EGL::EGL target for Android")
     endif()
-    # 同时创建别名目标 'egl' 指向 'EGL::EGL'
-    # 这样 weston CMakeLists.txt 中的 target_link_libraries(... egl) 也能正常工作
+    
+    # 创建 'egl' 别名（兼容 weston CMakeLists.txt）
     if(NOT TARGET egl)
         add_library(egl ALIAS EGL::EGL)
-        message(STATUS "Created 'egl' alias for 'EGL::EGL'")
-    endif()
-else()
-    # 如果 OpenGL_EGL_FOUND 为 FALSE，尝试直接查找 EGL 库
-    find_library(EGL_LIBRARY NAMES EGL)
-    if(EGL_LIBRARY)
-        message(STATUS "Found EGL library directly: ${EGL_LIBRARY}")
-        if(NOT TARGET EGL::EGL)
-            add_library(EGL::EGL SHARED IMPORTED)
-            set_target_properties(EGL::EGL PROPERTIES
-                IMPORTED_LOCATION ${EGL_LIBRARY}
-            )
-        endif()
-        if(NOT TARGET egl)
-            add_library(egl ALIAS EGL::EGL)
-        endif()
-    else()
-        message(FATAL_ERROR "Could not find EGL library")
+        message(STATUS "Created 'egl' alias for EGL::EGL")
     endif()
 endif()
 
