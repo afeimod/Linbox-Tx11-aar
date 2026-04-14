@@ -295,27 +295,11 @@ public class Launcher {
             throw new IllegalArgumentException("Binary path is not set. Box64: " + 
                 profile.getBox64BinaryPath() + ", Wine: " + profile.getWineBinaryPath());
 
-        // 获取屏幕分辨率
-        SettingWrapper wrapper = profile.getSettingWrapper();
-        String resolution = wrapper.getContainerDisplayResolution();
-        
-        // 处理分辨率格式，确保是 WIDTHxHEIGHT 格式
-        if (resolution == null || resolution.isEmpty()) {
-            resolution = "1024x768"; // 默认分辨率
-        } else if (!resolution.contains("x")) {
-            // 如果格式不正确，尝试修复
-            resolution = resolution + "x768";
-        }
-        
-        // 构造 Wine 虚拟桌面命令
-        // 格式: box64 wine explorer desktop=shell,<分辨率> taskmgr
-        // 注意: explorer 和 desktop= 参数必须分开传递，因为 ProcessBuilder 会将数组每个元素作为单独参数
+        // 简化的 Wine 命令，不再使用虚拟桌面
         return new String[]{
                 profile.getBox64BinaryPath().toString(),
                 profile.getWineBinaryPath().toString(),
-                "explorer",
-                "desktop=shell," + resolution,
-                "taskmgr"
+                "winecfg"
         };
     }
 
@@ -350,20 +334,23 @@ public class Launcher {
             if (westonInput == null)
                 return;
 
-            // 鼠标坐标应该在 0-1 范围内（归一化坐标）
             float x = event.getX();
             float y = event.getY();
-            
-            // 确保坐标在有效范围内
-            x = Math.max(0f, Math.min(1f, x));
-            y = Math.max(0f, Math.min(1f, y));
             
             // 诊断日志（可在调试时启用）
             // Log.d(TAG, "Mouse pointer: type=" + event.getType() + " x=" + x + " y=" + y);
 
             switch (event.getType()) {
-                case Relative -> westonInput.performPointer(WESTON_POINTER_MOTION_REL, x, y);
-                case Absolute -> westonInput.performPointer(WESTON_POINTER_MOTION_ABS, x, y);
+                case Relative -> {
+                    // 相对移动直接传递原始偏移值，不需要限制范围
+                    westonInput.performPointer(WESTON_POINTER_MOTION_REL, x, y);
+                }
+                case Absolute -> {
+                    // 绝对坐标需要确保在 0-1 范围内（归一化坐标）
+                    x = Math.max(0f, Math.min(1f, x));
+                    y = Math.max(0f, Math.min(1f, y));
+                    westonInput.performPointer(WESTON_POINTER_MOTION_ABS, x, y);
+                }
             }
         }
 
