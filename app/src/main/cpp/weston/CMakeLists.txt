@@ -619,11 +619,8 @@ target_link_libraries(
         wayland-protocols-viewporter
         wayland-protocols-xdg-shell
         weston-ivi-application
-        # EGL and GLESv2: Skip on Android - provided by system at runtime
-        $<$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>:>
-        $<$<NOT:$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>>:EGL>
-        $<$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>:>
-        $<$<NOT:$<STREQUAL:${CMAKE_SYSTEM_NAME},Android>>:GLESv2>
+        EGL
+        GLESv2
 )
 
 target_include_directories(
