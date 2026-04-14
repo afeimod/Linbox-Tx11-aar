@@ -131,9 +131,9 @@ public class Launcher {
                 startWeston();
                 startControlsOverlay();
 
-                // sleep for 1s to wait for shm and weston to start.
+                // 增加等待时间以确保 Weston 完全启动
                 // FIXME: consider using a callback to detect when shm and weston have actually started.
-                Thread.sleep(1000);
+                Thread.sleep(2000);  // 等待 2 秒，比之前的 1 秒更安全
                 startShell();
             } catch (Exception e) {
                 callback.onLaunchFailed(e.getMessage());
@@ -210,8 +210,16 @@ public class Launcher {
         westonConfig.setSocketPath(rootfs.getTmpDir().resolve(waylandDisplay).toString());
         westonConfig.setXkbConfigRootPath(rootfs.getXkbDir().toString());
         westonConfig.setXdgRuntimePath(rootfs.getTmpDir().toString());
-        westonConfig.setRenderRefreshRate(wrapper.getContainerDisplayRefreshRate());
-        westonConfig.setRendererType(WESTON_RENDERER_PIXMAN);
+        
+        // 使用用户设置的渲染器类型
+        int rendererType = wrapper.getContainerDisplayRendererBackend() == 
+                com.winfusion.feature.setting.key.SettingOptions.DisplayRendererBackend.OpenGLESRenderer 
+                ? WESTON_RENDERER_GL : WESTON_RENDERER_PIXMAN;
+        westonConfig.setRendererType(rendererType);
+        
+        // 使用用户设置的刷新率，如果为0则使用默认值60
+        int refreshRate = wrapper.getContainerDisplayRefreshRate();
+        westonConfig.setRenderRefreshRate(refreshRate > 0 ? refreshRate : 60);
         
         // 安全解析分辨率，添加格式验证
         String resolutionStr = wrapper.getContainerDisplayResolution();
@@ -342,13 +350,20 @@ public class Launcher {
             if (westonInput == null)
                 return;
 
-            //Log.d(TAG, event.toString());
+            // 鼠标坐标应该在 0-1 范围内（归一化坐标）
+            float x = event.getX();
+            float y = event.getY();
+            
+            // 确保坐标在有效范围内
+            x = Math.max(0f, Math.min(1f, x));
+            y = Math.max(0f, Math.min(1f, y));
+            
+            // 诊断日志（可在调试时启用）
+            // Log.d(TAG, "Mouse pointer: type=" + event.getType() + " x=" + x + " y=" + y);
 
             switch (event.getType()) {
-                case Relative -> westonInput.performPointer(WESTON_POINTER_MOTION_REL, event.getX(),
-                        event.getY());
-                case Absolute -> westonInput.performPointer(WESTON_POINTER_MOTION_ABS, event.getX(),
-                        event.getY());
+                case Relative -> westonInput.performPointer(WESTON_POINTER_MOTION_REL, x, y);
+                case Absolute -> westonInput.performPointer(WESTON_POINTER_MOTION_ABS, x, y);
             }
         }
 
@@ -357,7 +372,8 @@ public class Launcher {
             if (westonInput == null)
                 return;
 
-            //Log.d(TAG, event.toString());
+            // 诊断日志（可在调试时启用）
+            // Log.d(TAG, "Mouse button: state=" + event.getState() + " button=" + event.getButton());
 
             switch (event.getState()) {
                 case Pressed ->
