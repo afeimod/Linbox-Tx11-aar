@@ -130,6 +130,15 @@ jobs:
           else
             echo "警告: make_tables 文件不存在"
           fi
+          # 设置 wayland-scanner 可执行文件权限
+          if [ -f "app/src/main/cpp/scripts/bin/wayland-scanner" ]; then
+            chmod 755 app/src/main/cpp/scripts/bin/wayland-scanner
+            echo "已设置 wayland-scanner 为可执行:"
+            ls -la app/src/main/cpp/scripts/bin/wayland-scanner
+          else
+            echo "警告: wayland-scanner 文件不存在，尝试查找..."
+            find app/src/main/cpp -name "wayland-scanner" -type f 2>/dev/null | head -5
+          fi
           echo "权限修复完成"
           echo "检查 fluidsynth 目录权限:"
           ls -la app/src/main/cpp/fluidsynth/ 2>/dev/null | head -10
