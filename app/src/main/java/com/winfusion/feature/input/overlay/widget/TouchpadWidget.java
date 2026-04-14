@@ -133,7 +133,7 @@ public class TouchpadWidget extends BaseWidget<TouchpadWidget.TouchpadConfig> {
         
         // 应用灵敏度设置，并放大相对移动的值
         // 原始像素差值可能太小，需要放大才能在屏幕上移动足够距离
-        float sensitivity = widgetConfig.sensitivity;
+        float sensitivity = config.sensitivity;
         relX = relX * sensitivity * 10;  // 放大10倍作为基础增益
         relY = relY * sensitivity * 10;
         
