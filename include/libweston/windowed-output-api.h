@@ -32,17 +32,27 @@ extern "C" {
 
 #include <libweston/plugin-registry.h>
 
+#if defined(__ANDROID__) && !defined(ARRAY_LENGTH)
+#define ARRAY_LENGTH(a) (sizeof (a) / sizeof (a)[0])
+#endif
+
 struct weston_compositor;
 struct weston_output;
 
 #define WESTON_WINDOWED_OUTPUT_API_NAME_X11 "weston_windowed_output_api_x11_v2"
 #define WESTON_WINDOWED_OUTPUT_API_NAME_WAYLAND "weston_windowed_output_api_wayland_v2"
 #define WESTON_WINDOWED_OUTPUT_API_NAME_HEADLESS "weston_windowed_output_api_headless_v2"
+#ifdef __WINFUSION__
+#define WESTON_WINDOWED_OUTPUT_API_NAME_WINFUSION "weston_windowed_output_api_winfusion_v2"
+#endif
 
 enum weston_windowed_output_type {
 	WESTON_WINDOWED_OUTPUT_X11 = 0,
 	WESTON_WINDOWED_OUTPUT_WAYLAND,
 	WESTON_WINDOWED_OUTPUT_HEADLESS,
+#ifdef __WINFUSION__
+    WESTON_WINDOWED_OUTPUT_WINFUSION,
+#endif
 };
 
 struct weston_windowed_output_api {
@@ -94,6 +104,9 @@ weston_windowed_output_get_api(struct weston_compositor *compositor,
 		WESTON_WINDOWED_OUTPUT_API_NAME_X11,
 		WESTON_WINDOWED_OUTPUT_API_NAME_WAYLAND,
 		WESTON_WINDOWED_OUTPUT_API_NAME_HEADLESS,
+#ifdef __WINFUSION__
+        WESTON_WINDOWED_OUTPUT_API_NAME_WINFUSION,
+#endif
 	};
 
 	if (type >= ARRAY_LENGTH(api_names))

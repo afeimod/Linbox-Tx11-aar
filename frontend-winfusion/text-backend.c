@@ -1,6 +1,5 @@
 /*
- * Copyright © 2008 Kristian Høgsberg
- * Copyright 2022 Collabora, Ltd.
+ * Copyright © 2025 Junyu Long
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -24,46 +23,17 @@
  * SOFTWARE.
  */
 
-#ifndef WESTON_XALLOC_H
-#define WESTON_XALLOC_H
+#include "libweston/libweston.h"
+#include "weston.h"
 
-#ifdef  __cplusplus
-extern "C" {
-#endif
-
-#include <errno.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-
-static inline void *
-abort_oom_if_null(void *p)
+WL_EXPORT struct text_backend *
+text_backend_init(struct weston_compositor *ec)
 {
-	static const char oommsg[] = ": out of memory\n";
-	size_t written __attribute__((unused));
-
-	if (p)
-		return p;
-
-#ifdef __ANDROID__
-    const char* program_invocation_short_name = getprogname();
-#endif
-
-	written = write(STDERR_FILENO, program_invocation_short_name,
-		        strlen(program_invocation_short_name));
-	written = write(STDERR_FILENO, oommsg, strlen(oommsg));
-
-	abort();
+    return NULL;
 }
 
-#define xmalloc(s) (abort_oom_if_null(malloc(s)))
-#define xzalloc(s) (abort_oom_if_null(calloc(1, s)))
-#define xcalloc(n, s) (abort_oom_if_null(calloc(n, s)))
-#define xstrdup(s) (abort_oom_if_null(strdup(s)))
-#define xrealloc(p, s) (abort_oom_if_null(realloc(p, s)))
+WL_EXPORT void
+text_backend_destroy(struct text_backend *text_backend)
+{
 
-#ifdef  __cplusplus
 }
-#endif
-
-#endif /* WESTON_XALLOC_H */

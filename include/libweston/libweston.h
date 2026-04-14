@@ -2460,6 +2460,9 @@ enum weston_compositor_backend {
 	WESTON_BACKEND_VNC,
 	WESTON_BACKEND_WAYLAND,
 	WESTON_BACKEND_X11,
+#ifdef __WINFUSION__
+    WESTON_BACKEND_WINFUSION,
+#endif
 };
 
 enum weston_renderer_type {

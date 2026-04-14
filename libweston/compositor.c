@@ -52,7 +52,12 @@
 #include <time.h>
 #include <errno.h>
 #include <inttypes.h>
+
+#ifdef __ANDROID__
+#include <drm/drm_fourcc.h>
+#else
 #include <drm_fourcc.h>
+#endif
 
 #include "timeline.h"
 
@@ -9996,6 +10001,14 @@ weston_load_module(const char *name, const char *entrypoint,
 	if (name == NULL)
 		return NULL;
 
+#ifdef __ANDROID__
+    len = strlen(name);
+    if (len + 1 > PATH_MAX) {
+        weston_log("Module name [%zu] is larger then PATH_MAX [%d]\n", len, PATH_MAX);
+        return NULL;
+    }
+    strncpy(path, name, len + 1);
+#else
 	if (name[0] != '/') {
 		len = weston_module_path_from_env(name, path, sizeof path);
 		if (len == 0)
@@ -10010,6 +10023,7 @@ weston_load_module(const char *name, const char *entrypoint,
 	 * our buffer is an error here. */
 	if (len >= sizeof path)
 		return NULL;
+#endif
 
 	module = dlopen(path, RTLD_NOW | RTLD_NOLOAD);
 	if (module) {
@@ -10170,13 +10184,16 @@ weston_compositor_get_user_data(struct weston_compositor *compositor)
 }
 
 static const char * const backend_map[] = {
-	[WESTON_BACKEND_DRM] =		"drm-backend.so",
-	[WESTON_BACKEND_HEADLESS] =	"headless-backend.so",
-	[WESTON_BACKEND_PIPEWIRE] =	"pipewire-backend.so",
-	[WESTON_BACKEND_RDP] =		"rdp-backend.so",
-	[WESTON_BACKEND_VNC] =		"vnc-backend.so",
-	[WESTON_BACKEND_WAYLAND] =	"wayland-backend.so",
-	[WESTON_BACKEND_X11] =		"x11-backend.so",
+	[WESTON_BACKEND_DRM] =		    "drm-backend.so",
+	[WESTON_BACKEND_HEADLESS] =	    "headless-backend.so",
+	[WESTON_BACKEND_PIPEWIRE] =	    "pipewire-backend.so",
+	[WESTON_BACKEND_RDP] =		    "rdp-backend.so",
+	[WESTON_BACKEND_VNC] =		    "vnc-backend.so",
+	[WESTON_BACKEND_WAYLAND] =	    "wayland-backend.so",
+#ifdef __WINFUSION__
+    [WESTON_BACKEND_WINFUSION] =    "winfusion-backend.so",
+#endif
+	[WESTON_BACKEND_X11] =		    "x11-backend.so",
 };
 
 /** Load a backend into a weston_compositor
@@ -10485,7 +10502,7 @@ weston_output_finish_frame_from_timer(struct weston_output *output)
 }
 
 /** Retrieve the backend type of as described in enum
- * weston_compositor_backend. 
+ * weston_compositor_backend.
  *
  * Note that the backend must be loaded, with weston_compositor_load_backend
  *

@@ -43,7 +43,9 @@
 #include <linux/input.h>
 #include <unistd.h>
 
+#ifndef __ANDROID__
 #include <gbm.h>
+#endif
 
 #include "linux-sync-file.h"
 #include "timeline.h"
@@ -66,6 +68,10 @@
 #include "shared/weston-drm-fourcc.h"
 #include "shared/weston-egl-ext.h"
 #include "shared/xalloc.h"
+
+#ifdef __ANDROID__
+#include <endian.h>
+#endif
 
 #define BUFFER_DAMAGE_COUNT 2
 
@@ -4208,6 +4214,7 @@ gl_renderer_remove_renderbuffer_dmabuf(struct weston_output *output,
 static void
 gl_renderer_dmabuf_destroy(struct linux_dmabuf_memory *dmabuf)
 {
+#ifndef __ANDROID__
 	struct gl_renderer_dmabuf_memory *gl_renderer_dmabuf;
 	struct dmabuf_attributes *attributes;
 	int i;
@@ -4221,6 +4228,7 @@ gl_renderer_dmabuf_destroy(struct linux_dmabuf_memory *dmabuf)
 
 	gbm_bo_destroy(gl_renderer_dmabuf->bo);
 	free(gl_renderer_dmabuf);
+#endif
 }
 
 static struct linux_dmabuf_memory *
@@ -4229,6 +4237,9 @@ gl_renderer_dmabuf_alloc(struct weston_renderer *renderer,
 			 uint32_t format,
 			 const uint64_t *modifiers, const unsigned int count)
 {
+#ifdef __ANDROID__
+    return NULL;
+#else
 	struct gl_renderer *gr = (struct gl_renderer *)renderer;
 	struct dmabuf_allocator *allocator = gr->allocator;
 	struct gl_renderer_dmabuf_memory *gl_renderer_dmabuf;
@@ -4280,6 +4291,7 @@ gl_renderer_dmabuf_alloc(struct weston_renderer *renderer,
 	dmabuf->destroy = gl_renderer_dmabuf_destroy;
 
 	return dmabuf;
+#endif
 }
 
 static void
@@ -4335,6 +4347,7 @@ gl_renderer_create_fence_fd(struct weston_output *output)
 static void
 gl_renderer_allocator_destroy(struct dmabuf_allocator *allocator)
 {
+#ifndef __ANDROID__
 	if (!allocator)
 		return;
 
@@ -4342,12 +4355,16 @@ gl_renderer_allocator_destroy(struct dmabuf_allocator *allocator)
 		gbm_device_destroy(allocator->gbm_device);
 
 	free(allocator);
+#endif
 }
 
 static struct dmabuf_allocator *
 gl_renderer_allocator_create(struct gl_renderer *gr,
 			     const struct gl_renderer_display_options * options)
 {
+#ifdef __ANDROID__
+    return NULL;
+#else
 	struct dmabuf_allocator *allocator;
 	struct gbm_device *gbm = NULL;
 	bool has_own_device = false;
@@ -4367,6 +4384,7 @@ gl_renderer_allocator_create(struct gl_renderer *gr,
 	allocator->has_own_device = has_own_device;
 
 	return allocator;
+#endif
 }
 
 static void
@@ -4894,6 +4912,10 @@ gl_renderer_setup(struct weston_compositor *ec)
 			    yesno(gr->has_gl_texture_rg));
 	weston_log_continue(STAMP_SPACE "OES_EGL_image_external: %s\n",
 			    yesno(gr->has_egl_image_external));
+
+#ifdef  __ANDROID__
+    eglMakeCurrent(gr->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+#endif
 
 	return 0;
 }
