@@ -28,7 +28,7 @@ on:
 
 jobs:
   build:
-    name: 构建 ${{ inputs.build_type }} APK (分支: ${{ inputs.branch }})
+    name: 构建 ${{ inputs.build_type }} APK 分支: ${{ inputs.branch }}
     runs-on: ubuntu-latest
     
     steps:
