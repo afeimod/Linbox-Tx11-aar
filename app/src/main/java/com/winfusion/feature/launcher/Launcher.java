@@ -248,14 +248,21 @@ public class Launcher {
             overlayController = overlayView.getController();
             overlayController.updateScreenSize(overlayView.getWidth(), overlayView.getHeight());
             overlayController.updateStatus(WidgetProvider.Status.Control);
+            // 关键：设置 inputInterface 使触摸板事件能够传递到 Weston
+            overlayController.setInputInterface(inputInterface);
+            // 关键：更新触摸板边界，确保它覆盖整个屏幕
+            overlayController.getTouchpad().notifyConfigUpdated();
             Overlay overlay = OverlayManager.getInstance().getOverlayByFileName(
                     profile.getSettingWrapper().getContainerControlOverlayProfile());
             if (overlay != null)
                 overlayController.setProfile(overlay.getProfile());
             overlayView.addOnLayoutChangeListener((v, left, top, right,
                                                    bottom, oldLeft, oldTop, oldRight,
-                                                   oldBottom) ->
-                    overlayController.updateScreenSize(right - left, bottom - top));
+                                                   oldBottom) -> {
+                    overlayController.updateScreenSize(right - left, bottom - top);
+                    // 每次屏幕尺寸变化时也更新触摸板边界
+                    overlayController.getTouchpad().notifyConfigUpdated();
+            });
         });
     }
 
@@ -299,7 +306,7 @@ public class Launcher {
         return new String[]{
                 profile.getBox64BinaryPath().toString(),
                 profile.getWineBinaryPath().toString(),
-                "winecfg"
+                "taskmgr"
         };
     }
 
