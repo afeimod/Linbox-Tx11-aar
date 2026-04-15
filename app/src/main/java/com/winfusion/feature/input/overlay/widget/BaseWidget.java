@@ -118,10 +118,18 @@ public abstract class BaseWidget<T extends BaseWidget.Config> {
         int xPx = (int) (config.normalizedX * widgetProvider.getBaseWidth());
         int yPx = (int) (config.normalizedY * widgetProvider.getBaseHeight());
 
-        bounding.left = xPx - sizePx / 2;
-        bounding.right = bounding.left + sizePx;
-        bounding.top = yPx - sizePx / 2;
-        bounding.bottom = bounding.top + sizePx;
+        // 特殊处理 TouchpadWidget：让它覆盖整个屏幕区域
+        if (this instanceof com.winfusion.feature.input.overlay.widget.TouchpadWidget) {
+            bounding.left = 0;
+            bounding.top = 0;
+            bounding.right = widgetProvider.getBaseWidth();
+            bounding.bottom = widgetProvider.getBaseHeight();
+        } else {
+            bounding.left = xPx - sizePx / 2;
+            bounding.right = bounding.left + sizePx;
+            bounding.top = yPx - sizePx / 2;
+            bounding.bottom = bounding.top + sizePx;
+        }
     }
 
     protected int getOpacity() {

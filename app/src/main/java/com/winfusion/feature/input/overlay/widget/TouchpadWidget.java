@@ -147,7 +147,7 @@ public class TouchpadWidget extends BaseWidget<TouchpadWidget.TouchpadConfig> {
         public float sensitivity = 1f;
 
         public TouchpadConfig() {
-            super(0);
+            super(1.0f);  // 使用 1.0f 作为默认大小，让触摸板覆盖整个屏幕
         }
     }
 }
