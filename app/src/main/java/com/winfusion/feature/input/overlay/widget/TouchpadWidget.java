@@ -84,10 +84,17 @@ public class TouchpadWidget extends BaseWidget<TouchpadWidget.TouchpadConfig> {
     }
 
     private void handleOneFingerDrag(@NonNull Gesture gesture) {
-        if (gesture.getStage() == Gesture.Stage.START)
+        if (gesture.getStage() == Gesture.Stage.START) {
             lastPoint.set(gesture.getX(), gesture.getY());
-        else if (gesture.getStage() == Gesture.Stage.RUNNING || gesture.getStage() == Gesture.Stage.FINISH)
+            // 拖动开始时按下鼠标左键
+            inputInterface.onMouseButtonEvent(new MouseButtonEvent(KeyState.Pressed, StandardButton.BtnLeft));
+        } else if (gesture.getStage() == Gesture.Stage.RUNNING) {
             moveMouseAndUpdatePointCache(gesture);
+        } else if (gesture.getStage() == Gesture.Stage.FINISH) {
+            moveMouseAndUpdatePointCache(gesture);
+            // 拖动结束时释放鼠标左键
+            inputInterface.onMouseButtonEvent(new MouseButtonEvent(KeyState.Released, StandardButton.BtnLeft));
+        }
     }
 
     private void handleTwoFingerClick(@NonNull Gesture gesture) {
